@@ -8,7 +8,6 @@ const qrcode = require('qrcode-terminal');
 const { Client, MessageMedia, LocalAuth, LegacySessionAuth } = require('whatsapp-web.js');
 const cors = require('cors');
 const readline = require('readline');
-const readable = fs.createReadStream('teste.csv')
 const xl = require('excel4node');
 const wb = new xl.Workbook();
 const tabela = wb.addWorksheet('Worksheet Name');
