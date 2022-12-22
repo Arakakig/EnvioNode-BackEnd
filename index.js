@@ -24,19 +24,9 @@ app.use(express.json())
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, "frontend", "static")))
 
 
-const rl = readline.createInterface({
-    input: readable,
-    terminal: false
-})
 
-let listdata = []
 
-rl.on('line', (line) => {
-    const words = line.split(';');
-    let numberList = transformNumber(words[2]);
-    listdata.push({ number: [numberList], name: words[0], idade: words[1], email: words[3] }
-    )
-})
+
 
 function transformNumber(number) {
     const numberSeparator = number.split(' ');
