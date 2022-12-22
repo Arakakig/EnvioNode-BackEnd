@@ -19,13 +19,19 @@ function _0x4d9e(_0x415df2, _0x36d71e) { const _0x3be044 = _0x3be0(); return _0x
 
 const port = process.env.PORT || 4001;
 
-app.use(express.static(__dirname + '/frontend/static'));
+app.use(express.static(path.join(__dirname, "./frontend")));
 app.use(express.json())
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, "frontend", "static")))
+app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, "./frontend/index.html"),
+    function (err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+    }))
 
 
 
 
+let listdata = []
 
 
 function transformNumber(number) {
@@ -178,7 +184,7 @@ app.post('/sendmessagewhatsapp', async (req, res) => {
                 numberUser = numberUser.replace(/\D+/g, '');
                 numberUser = numberUser.replace('@c.us', '');
                 numberUser = `${numberUser}@c.us`
-                if(numberUser.length === 18 && numberUser[4] === '9'){
+                if (numberUser.length === 18 && numberUser[4] === '9') {
                     numberUser = numberUser.slice(0, 4) + numberUser.slice(5);
                 }
                 const message = data.message || `Olá, tudo bem?`;
@@ -210,10 +216,10 @@ app.post('/sendmessagewhatsapp', async (req, res) => {
             numberUser = numberUser.replace(/\D+/g, '');
             numberUser = numberUser.replace('@c.us', '');
             numberUser = `${numberUser}@c.us`
-            if(numberUser.length === 18 && numberUser[4] === '9'){
+            if (numberUser.length === 18 && numberUser[4] === '9') {
                 numberUser = numberUser.slice(0, 4) + numberUser.slice(5);
             }
-           
+
 
             const message = data.message || `Olá, tudo bem?`;
             messageContent = message;
