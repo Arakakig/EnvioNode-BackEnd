@@ -1,27 +1,27 @@
 const express = require('express');
 const path = require("path");
 const app = express();
-const admin = require('firebase-admin');
-const nodemailer = require('nodemailer')
+// const nodemailer = require('nodemailer');
 const fs = require('fs');
 const qrcode = require('qrcode-terminal');
 const { Client, MessageMedia, LocalAuth, LegacySessionAuth } = require('whatsapp-web.js');
 const cors = require('cors');
 const readline = require('readline');
-const xl = require('excel4node');
-const wb = new xl.Workbook();
-const tabela = wb.addWorksheet('Worksheet Name');
+// const xl = require('excel4node');
+// const wb = new xl.Workbook();
+// const tabela = wb.addWorksheet('Worksheet Name');
 
 
-const user = "guipecoisarakaki@gmail.com"
-function _0x4d9e(_0x415df2, _0x36d71e) { const _0x3be044 = _0x3be0(); return _0x4d9e = function (_0x4d9eba, _0x5cf593) { _0x4d9eba = _0x4d9eba - 0x65; let _0x110e2b = _0x3be044[_0x4d9eba]; return _0x110e2b; }, _0x4d9e(_0x415df2, _0x36d71e); } function _0x3be0() { const _0x3a4471 = ['5535090zjirvi', '1229150eNpaxE', '1775520EEoMga', '1166808KMBwPx', '1yzmIoF', '1046176KVNrQq', '11376vzzbHg', '836928laongq', 'arakaki34', '336RBfavn']; _0x3be0 = function () { return _0x3a4471; }; return _0x3be0(); } const _0x46f2db = _0x4d9e; (function (_0x44d0fb, _0x310942) { const _0xb7a64b = _0x4d9e, _0x516a58 = _0x44d0fb(); while (!![]) { try { const _0x115ba8 = parseInt(_0xb7a64b(0x6d)) / 0x1 * (-parseInt(_0xb7a64b(0x6e)) / 0x2) + -parseInt(_0xb7a64b(0x66)) / 0x3 + parseInt(_0xb7a64b(0x6b)) / 0x4 + -parseInt(_0xb7a64b(0x6a)) / 0x5 + parseInt(_0xb7a64b(0x6c)) / 0x6 + -parseInt(_0xb7a64b(0x68)) / 0x7 * (-parseInt(_0xb7a64b(0x65)) / 0x8) + parseInt(_0xb7a64b(0x69)) / 0x9; if (_0x115ba8 === _0x310942) break; else _0x516a58['push'](_0x516a58['shift']()); } catch (_0x9e23aa) { _0x516a58['push'](_0x516a58['shift']()); } } }(_0x3be0, 0x42d38)); const pass = _0x46f2db(0x67);
+// const user = "guipecoisarakaki@gmail.com"
+// function _0x4d9e(_0x415df2, _0x36d71e) { const _0x3be044 = _0x3be0(); return _0x4d9e = function (_0x4d9eba, _0x5cf593) { _0x4d9eba = _0x4d9eba - 0x65; let _0x110e2b = _0x3be044[_0x4d9eba]; return _0x110e2b; }, _0x4d9e(_0x415df2, _0x36d71e); } function _0x3be0() { const _0x3a4471 = ['5535090zjirvi', '1229150eNpaxE', '1775520EEoMga', '1166808KMBwPx', '1yzmIoF', '1046176KVNrQq', '11376vzzbHg', '836928laongq', 'arakaki34', '336RBfavn']; _0x3be0 = function () { return _0x3a4471; }; return _0x3be0(); } const _0x46f2db = _0x4d9e; (function (_0x44d0fb, _0x310942) { const _0xb7a64b = _0x4d9e, _0x516a58 = _0x44d0fb(); while (!![]) { try { const _0x115ba8 = parseInt(_0xb7a64b(0x6d)) / 0x1 * (-parseInt(_0xb7a64b(0x6e)) / 0x2) + -parseInt(_0xb7a64b(0x66)) / 0x3 + parseInt(_0xb7a64b(0x6b)) / 0x4 + -parseInt(_0xb7a64b(0x6a)) / 0x5 + parseInt(_0xb7a64b(0x6c)) / 0x6 + -parseInt(_0xb7a64b(0x68)) / 0x7 * (-parseInt(_0xb7a64b(0x65)) / 0x8) + parseInt(_0xb7a64b(0x69)) / 0x9; if (_0x115ba8 === _0x310942) break; else _0x516a58['push'](_0x516a58['shift']()); } catch (_0x9e23aa) { _0x516a58['push'](_0x516a58['shift']()); } } }(_0x3be0, 0x42d38)); const pass = _0x46f2db(0x67);
 
 
 const port = process.env.PORT || 4001;
 
 app.use(express.static(path.join(__dirname, "./frontend")));
+
 app.use(express.json())
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, "./frontend/index.html"),
+app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, "./frontend/index.html"),
     function (err) {
         if (err) {
             res.status(500).send(err);
@@ -31,7 +31,6 @@ app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, "./frontend/inde
 
 
 
-let listdata = []
 
 
 function transformNumber(number) {
@@ -49,43 +48,43 @@ function transformNumber(number) {
 
 
 
-app.get("/*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "index.html"));
-});
+// app.get("/*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "frontend", "index.html"));
+// });
 
-app.post('/sendemail', async (req, res) => {
-    const data = req.body;
-    let array = [], messageContent = data.content, title = data.title;
-    let numbersArray = []
-    await data.listDocUsers.forEach(element => {
-        numbersArray.push(element.email)
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            auth: { user, pass },
-        })
-        transporter.sendMail({
-            from: user,
-            to: element.email,
-            replyTo: "guilherme.arakaki@ufms.br",
-            subject: `Olá ${element.name},` + data.title,
-            html: data.content,
-            attachments: [{
-                filename: 'teste1.jpeg',
-                path: 'teste1.jpeg',
-                contentType: 'application/jpeg'
-            }],
-        }).then(info => {
-            // arraySucefull.push(element)
-        }).catch(error => {
-            array.push(element)
-        })
-        console.log(element)
-    });
-    res.send({ msg: 'done', data: array, numbersArray, messageContent, type: 'email', title })
+// app.post('/sendemail', async (req, res) => {
+//     const data = req.body;
+//     let array = [], messageContent = data.content, title = data.title;
+//     let numbersArray = []
+//     await data.listDocUsers.forEach(element => {
+//         numbersArray.push(element.email)
+//         const transporter = nodemailer.createTransport({
+//             host: "smtp.gmail.com",
+//             port: 587,
+//             auth: { user, pass },
+//         })
+//         transporter.sendMail({
+//             from: user,
+//             to: element.email,
+//             replyTo: "guilherme.arakaki@ufms.br",
+//             subject: `Olá ${element.name},` + data.title,
+//             html: data.content,
+//             attachments: [{
+//                 filename: 'teste1.jpeg',
+//                 path: 'teste1.jpeg',
+//                 contentType: 'application/jpeg'
+//             }],
+//         }).then(info => {
+//             // arraySucefull.push(element)
+//         }).catch(error => {
+//             array.push(element)
+//         })
+//         console.log(element)
+//     });
+//     res.send({ msg: 'done', data: array, numbersArray, messageContent, type: 'email', title })
 
 
-})
+// })
 
 // API
 app.use(express.urlencoded({ extended: true }));
@@ -247,34 +246,34 @@ app.post('/sendmessagewhatsapp', async (req, res) => {
 
         }
     })
-    emitExcel(dataTable)
+    // emitExcel(dataTable)
     res.send({ msg: 'done', data: array, numbersArray, messageContent, type: 'whatsApp' })
 })
 
 
-function emitExcel(dataTable) {
-    const headingColumnNames = [
-        "Nome",
-        "Email",
-        "Celular",
-    ]
-    let headingColumnIndex = 1; //diz que começará na primeira linha
-    headingColumnNames.forEach(heading => {
-        tabela.cell(1, headingColumnIndex++).string(heading);
-    });
+// function emitExcel(dataTable) {
+//     const headingColumnNames = [
+//         "Nome",
+//         "Email",
+//         "Celular",
+//     ]
+//     let headingColumnIndex = 1; //diz que começará na primeira linha
+//     headingColumnNames.forEach(heading => {
+//         tabela.cell(1, headingColumnIndex++).string(heading);
+//     });
 
-    let rowIndex = 2;
-    dataTable.forEach(record => {
-        let columnIndex = 1;
-        Object.keys(record).forEach(columnName => {
-            tabela.cell(rowIndex, columnIndex++)
-                .string(record[columnName])
-        });
-        rowIndex++;
-    });
+//     let rowIndex = 2;
+//     dataTable.forEach(record => {
+//         let columnIndex = 1;
+//         Object.keys(record).forEach(columnName => {
+//             tabela.cell(rowIndex, columnIndex++)
+//                 .string(record[columnName])
+//         });
+//         rowIndex++;
+//     });
 
-    wb.write('ArquivoExcel.xlsx');
-}
+//     wb.write('ArquivoExcel.xlsx');
+// }
 
 
 const sendMidia = (req, res) => {
